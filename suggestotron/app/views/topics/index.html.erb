@@ -1,0 +1,36 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Topics</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>No. of Votes</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% if user_signed_in? %>
+      <p>Hello <%= current_user.email %>!
+        <%=link_to "Sign out", destroy_user_session_path, method: :delete %> 
+      </p>
+    <% end %>
+
+    <% @topics.sort_by{|topic| 0 - topic.votes.count}.each do |topic| %>
+      <tr>
+        <td><%= link_to topic.title, topic %></td>
+        <td><%= pluralize(topic.votes.count, "vote") %></td>
+        <td><%= button_to '+1', upvote_topic_path(topic), method: :post %></td>
+        <td><%= button_to '-1', downvote_topic_path(topic), method: :post %></td>
+        <td><%= link_to 'Delete', topic, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Topic', new_topic_path %>
+<br><br>
+<%= link_to 'About Suggestotron', about_path %>
